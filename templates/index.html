@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>World Cup 2026 Match Viewer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        select,
+        input {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button,
+        .reset-link,
+        .admin-link {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #1f5eff;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .reset-link {
+            background-color: #666;
+        }
+
+        .admin-link {
+            background-color: #111827;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #111827;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        tr:hover {
+            background-color: #eef2ff;
+        }
+
+        .status {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .score {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>World Cup 2026 Match Viewer</h1>
+        <p class="subtitle">Browse group stage matches, teams, venues and scores.</p>
+
+        <form method="GET" action="/">
+            <label for="group">Filter by group:</label>
+            <select name="group" id="group">
+                <option value="">All groups</option>
+                {% for group in groups %}
+                    <option value="{{ group[0] }}" {% if selected_group == group[0] %}selected{% endif %}>
+                        Group {{ group[0] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="team">Search team:</label>
+            <input type="text" name="team" id="team" value="{{ selected_team or '' }}" placeholder="e.g. Brazil">
+
+            <label for="sort_by">Sort by:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="match" {% if sort_by == "match" %}selected{% endif %}>Match</option>
+                <option value="group" {% if sort_by == "group" %}selected{% endif %}>Group</option>
+                <option value="date" {% if sort_by == "date" %}selected{% endif %}>Date</option>
+                <option value="city" {% if sort_by == "city" %}selected{% endif %}>City</option>
+                <option value="region" {% if sort_by == "region" %}selected{% endif %}>Region</option>
+            </select>
+
+            <button type="submit">Apply filter</button>
+            <a class="reset-link" href="/">Reset</a>
+            <a class="admin-link" href="/admin">Admin</a>
+        </form>
+
+        <table>
+            <tr>
+                <th>Match</th>
+                <th>Home Team</th>
+                <th>Away Team</th>
+                <th>Group</th>
+                <th>Date</th>
+                <th>Time (local time)</th>
+                <th>City</th>
+                <th>Region</th>
+                <th>Stage</th>
+                <th>Score</th>
+                <th>Status</th>
+            </tr>
+
+            {% for match in matches %}
+            <tr>
+                <td>{{ match[0] }}</td>
+                <td>{{ match[1] }}</td>
+                <td>{{ match[2] }}</td>
+                <td>{{ match[3] }}</td>
+                <td>{{ match[4] }}</td>
+                <td>{{ match[5] }}</td>
+                <td>{{ match[6] }}</td>
+                <td>{{ match[7] }}</td>
+                <td>{{ match[8] }}</td>
+                <td class="score">
+                    {% if match[9] is none and match[10] is none %}
+                        -
+                    {% else %}
+                        {{ match[9] }} - {{ match[10] }}
+                    {% endif %}
+                </td>
+                <td class="status">{{ match[11] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <p class="footer-note">
+            Match status is derived from score values. If no score is stored, the match is shown as upcoming.
+            Times are shown in local venue time.
+        </p>
+    </div>
+</body>
+</html>

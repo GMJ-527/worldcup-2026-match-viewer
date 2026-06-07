@@ -10,7 +10,7 @@ def get_connection():
         host="localhost",
         database="WorldCup",
         user="postgres",
-        password="akram123",
+        password="YOUR_PASSWORD",
         port="5432"
     )
 

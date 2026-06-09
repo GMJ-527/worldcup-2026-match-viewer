@@ -1,0 +1,4 @@
+AI Declaration
+
+AI was used for project planning, Debugging and HTML/CSS layout.
+

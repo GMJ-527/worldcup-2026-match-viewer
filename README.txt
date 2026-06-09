@@ -36,3 +36,11 @@ Setup:
 
 Admin page:
    http://127.0.0.1:5000/admin
+
+
+AI Declaration
+
+AI was used for project planning, Debugging and with HTML/CSS layout.
+
+
+
